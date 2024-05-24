@@ -3,7 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\DepartmentController;
+use App\Http\Controllers\API\EmployeeController;
+use App\Http\Controllers\API\PaidHolidaySettingsController;
+use App\Http\Controllers\API\SpecialHolidaySettingsController;
+use App\Http\Controllers\API\AbsenceRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +27,42 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/products/search/{title}', [ProductController::class, 'search']);
-});
-Route::apiResource('products', ProductController::class)->middleware('auth:api');
+// Departmenet
+Route::post('/department_list', [DepartmentController::class, 'index']);
+Route::post('/create_department', [DepartmentController::class, 'store']);
+Route::post('/remove_department', [DepartmentController::class, 'destroy']);
+Route::post('/update_department', [DepartmentController::class, 'update']);
+Route::post('/show_department', [DepartmentController::class, 'show']);
+
+// Employee
+Route::post('/employee_list', [EmployeeController::class, 'index']);
+Route::post('/create_employee', [EmployeeController::class, 'store']);
+Route::post('/remove_employee', [EmployeeController::class, 'destroy']);
+Route::post('/update_employee', [EmployeeController::class, 'update']);
+Route::post('/show_employee', [EmployeeController::class, 'show']);
+
+// PaidHolidaySettings
+Route::post('/update_paidholidaysettings', [PaidHolidaySettingsController::class, 'update']);
+Route::post('/show_paidholidaysettings', [PaidHolidaySettingsController::class, 'show']);
+
+// SpecialHolidaySettings
+Route::post('/speicalholidaysettings_list', [SpecialHolidaySettingsController::class, 'index']);
+Route::post('/create_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'store']);
+Route::post('/remove_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'destroy']);
+Route::post('/update_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'update']);
+Route::post('/show_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'show']);
+
+// SpecialHolidaySettings
+Route::post('/speicalholidaysettings_list', [SpecialHolidaySettingsController::class, 'index']);
+Route::post('/create_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'store']);
+Route::post('/remove_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'destroy']);
+Route::post('/update_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'update']);
+Route::post('/show_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'show']);
+
+// AbsenceRegistration
+Route::post('/create_absenceregistration', [AbsenceRegistrationController::class, 'store']);
+Route::post('/remove_absenceregistration', [AbsenceRegistrationController::class, 'destroy']);
+Route::post('/update_absenceregistration', [AbsenceRegistrationController::class, 'update']);
+Route::post('/show_absenceregistration', [AbsenceRegistrationController::class, 'show']);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -12,9 +12,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            // 'name' => 'required|max:55',
             'email' => 'email|required|unique:users',
-            // 'password' => 'required|confirmed'
             'password' => 'required'
         ]);
 
@@ -29,25 +27,31 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $loginData = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
-        ]);
+        $email = $request['email'];
+        $password = $request['password'];
 
-        if (!auth()->attempt($loginData)) {
-            return response(['message' => 'User does not exist, please check your details'], 400);
+        $employee = Employee::where('email', $email)->first();
+
+        if($employee) {
+            if(Hash::check($password, $employee->password)) {
+                $accessToken = $employee->createToken('yukyu')->accessToken;
+                $employee->token = $accessToken;
+                $this->setMemberSession($employee);
+                return response(['status' => 'success', 'user' => $employee, 'token' => $accessToken]);
+            } else {
+                return response(['status' => 'failure', 'error' => 'Invalid Password']);
+            }
+        } else {
+            return response(['status' => 'failure', 'error' => 'Not exist']);
         }
-
-        $accessToken = auth()->user()->createToken('authToken')->accessToken;
-
-        return response(['user' => auth()->user(), 'access_token' => $accessToken]);
     }
 
     public function logout(Request $request) {
-        auth()->user()->tokens()->delete();
-
-        return [
-            'message' => 'Logged out'
-        ];
+        if($this->getMemberSession()) {
+            $this->deleteMemberSession();
+            return response(['status' => 'success']);
+        } else {
+            return response(['status' => 'failure', 'msg' => 'Not login']);
+        }
     }
 }

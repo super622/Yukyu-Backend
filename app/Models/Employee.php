@@ -8,9 +8,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class Employee extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'tbl_employee';
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +25,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'employee_id',
         'name',
+        'kana_name',
         'email',
         'password',
+        'department',
+        'hire_date',
+        'onleave',
+        'working_type',
+        'working_hours',
+        'note'
     ];
 
     /**
@@ -30,15 +45,5 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 }
