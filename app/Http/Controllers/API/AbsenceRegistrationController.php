@@ -72,7 +72,7 @@ class AbsenceRegistrationController extends Controller
      */
     public function show(Request $request)
     {
-        $absences = AbsenceRegistration::find($request->id);
+        $absences = AbsenceRegistration::where('id', '=', $request->id)->get();
         if($absences) {
             return response(['status' => 'success', 'data' => $absences]);
         }

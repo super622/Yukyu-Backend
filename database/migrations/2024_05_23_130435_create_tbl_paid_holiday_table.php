@@ -14,13 +14,13 @@ class CreateTblPaidHolidayTable extends Migration
     public function up()
     {
         Schema::create('tbl_paid_holiday', function (Blueprint $table) {
-            $table->id();
-            $table->integer('type');
+            $table->integer('id')->default(1);
+            $table->string('type');
             $table->integer('employee_id');
-            $table->integer('grant_type');
-            $table->integer('granted_days');
+            $table->integer('grant_type')->default(0);
+            $table->integer('granted_days')->default(0);
             $table->longText('note');
-            $table->timestamp('granted_at')->nullable();
+            $table->timestamp('granted_at');
             $table->timestamp('expired_at')->nullable();
             $table->timestamps();
         });

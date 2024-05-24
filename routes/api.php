@@ -8,6 +8,8 @@ use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\PaidHolidaySettingsController;
 use App\Http\Controllers\API\SpecialHolidaySettingsController;
 use App\Http\Controllers\API\AbsenceRegistrationController;
+use App\Http\Controllers\API\PaidHolidayController;
+use App\Http\Controllers\API\SpecialHolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,3 +68,15 @@ Route::post('/create_absenceregistration', [AbsenceRegistrationController::class
 Route::post('/remove_absenceregistration', [AbsenceRegistrationController::class, 'destroy']);
 Route::post('/update_absenceregistration', [AbsenceRegistrationController::class, 'update']);
 Route::post('/show_absenceregistration', [AbsenceRegistrationController::class, 'show']);
+
+// PaidHoliday
+Route::post('/create_paidholiday', [PaidHolidayController::class, 'store']);
+Route::post('/remove_paidholiday', [PaidHolidayController::class, 'destroy']);
+Route::post('/update_paidholiday', [PaidHolidayController::class, 'update']);
+Route::post('/show_paidholiday', [PaidHolidayController::class, 'show']);
+
+// SpecialHoliday
+Route::post('/create_specialholiday', [SpecialHolidayController::class, 'store']);
+Route::post('/remove_specialholiday', [SpecialHolidayController::class, 'destroy']);
+Route::post('/update_specialholiday', [SpecialHolidayController::class, 'update']);
+Route::post('/show_specialholiday', [SpecialHolidayController::class, 'show']);
