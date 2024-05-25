@@ -29,7 +29,7 @@ class Controller extends BaseController
     public function __construct() {
         session_start();
         $currentPath= Route::getFacadeRoot()->current()->uri();
-        if($currentPath != "api/login" && $currentPath != "api/logout") {
+        if($currentPath != "api/login" && $currentPath != "api/logout" && $currentPath != "api/regist") {
             $token = request()->header('Authorization');
             $token = explode('"}', $token)[0];
             if(!$this->isLogin($token)) {

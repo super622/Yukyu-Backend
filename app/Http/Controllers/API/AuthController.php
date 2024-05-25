@@ -6,22 +6,65 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function regist(Request $request)
     {
-        $validatedData = $request->validate([
-            'email' => 'email|required|unique:users',
-            'password' => 'required'
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'email' => 'email|required|unique:tbl_employee',
+            'password' => 'required',
+            'confirm_password' => 'required'
         ]);
 
-        $validatedData['password'] = Hash::make($request->password);
-        $user = User::create($validatedData);
-        $accessToken = $user->createToken('authToken')->accessToken;
+        if ($validator->fails()) {
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
+        }
 
-        return response(['user' => $user, 'access_token' => $accessToken], 201);
+        if(strlen($request->password) < 6 || strlen($request->confirm_password) < 6) {
+            return response(['status' => 'failure', 'msg' => 'パスワードは6文字以上で入力してください。']);
+        }
+
+        if($request->password != $request->confirm_password) {
+            return response(['status' => 'failure', 'msg' => 'パスワードが一致しません']);
+        }
+
+        $data['password'] = Hash::make($request->password);
+        $user = Employee::create($data);
+        $accessToken = $user->createToken('accessToken')->accessToken;
+
+        $transport = new Swift_SmtpTransport('smtp.example.org', 25);
+        $mailer = new Swift_Mailer($transport);
+
+        $from_name  = html_entity_decode('Online-Anytime', ENT_QUOTES);
+        $from_email = 'no-reply@online-anytime.com.au';
+        $subject = 'Login';
+        $email = 'masonrose622@gmail.com';
+
+        $email_content = <<< EOT
+            Hello <br />
+            Thank you,<br/>
+            <img src="https://online-anytime.com.au/olat/images/logo.png" width="150" height="80"><br/>
+            Email: support@online-anytime.com
+            <br />
+        EOT;
+
+        $message = (new Swift_Message($subject))
+            ->setFrom([$from_email => $from_name])
+            ->setTo([$email])
+            ->setBody($email_content, 'text/html');
+
+        $mailer->send($message);
+
+        return response(['status' => 'success', 'user' => $user, 'token' => $accessToken]);
     }
+
 
     public function login(Request $request)
     {
