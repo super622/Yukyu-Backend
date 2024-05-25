@@ -17,9 +17,7 @@ class AuthController extends Controller
         ]);
 
         $validatedData['password'] = Hash::make($request->password);
-
         $user = User::create($validatedData);
-
         $accessToken = $user->createToken('authToken')->accessToken;
 
         return response(['user' => $user, 'access_token' => $accessToken], 201);
@@ -29,7 +27,6 @@ class AuthController extends Controller
     {
         $email = $request['email'];
         $password = $request['password'];
-
         $employee = Employee::where('email', $email)->first();
 
         if($employee) {
@@ -39,10 +36,10 @@ class AuthController extends Controller
                 $this->setMemberSession($employee);
                 return response(['status' => 'success', 'user' => $employee, 'token' => $accessToken]);
             } else {
-                return response(['status' => 'failure', 'error' => 'Invalid Password']);
+                return response(['status' => 'failure', 'msg' => 'パスワードが正しくありません。']);
             }
         } else {
-            return response(['status' => 'failure', 'error' => 'Not exist']);
+            return response(['status' => 'failure', 'msg' => 'ユーザー情報が存在しません。']);
         }
     }
 

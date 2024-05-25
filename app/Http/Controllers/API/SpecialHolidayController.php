@@ -39,7 +39,7 @@ class SpecialHolidayController extends Controller
             ]);
     
             if ($validator->fails()) {
-                return response(['status' => 'failure', 'msg' => $validator->errors()]);
+                return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
             }
 
             $granted_at = Carbon::parse($request->granted_at);
@@ -60,14 +60,14 @@ class SpecialHolidayController extends Controller
             ]);
     
             if ($validator->fails()) {
-                return response(['status' => 'failure', 'msg' => $validator->errors()]);
+                return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
             }
 
             $startDay = Carbon::parse($request->granted_at);
             $endDay = Carbon::parse($request->granted_end_at);
     
             if($startDay > $endDay) {
-                return response(['status' => 'failure', 'msg' => 'absence_day < absence_end_day']);
+                return response(['status' => 'failure', 'msg' => '日付を正確に入力してください。']);
             }
     
             $specialholidays = [];
@@ -101,7 +101,7 @@ class SpecialHolidayController extends Controller
         if($specialholiday) {
             return response(['status' => 'success', 'data' => $specialholiday]);
         }
-        return response(['status' => 'failure']);
+        return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
 
     /**
@@ -123,7 +123,7 @@ class SpecialHolidayController extends Controller
             ]);
     
             if ($validator->fails()) {
-                return response(['status' => 'failure', 'msg' => $validator->errors()]);
+                return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
             }
 
             $granted_at = Carbon::parse($request->granted_at);
@@ -143,14 +143,14 @@ class SpecialHolidayController extends Controller
             ]);
     
             if ($validator->fails()) {
-                return response(['status' => 'failure', 'msg' => $validator->errors()]);
+                return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
             }
 
             $startDay = Carbon::parse($request->granted_at);
             $endDay = Carbon::parse($request->granted_end_at);
     
             if($startDay > $endDay) {
-                return response(['status' => 'failure', 'msg' => 'absence_day < absence_end_day']);
+                return response(['status' => 'failure', 'msg' => '日付を正確に入力してください。']);
             }
     
             SpecialHoliday::where('id', $request->id)->delete();
@@ -186,6 +186,6 @@ class SpecialHolidayController extends Controller
         if($res) {
             return response(['status' =>'success', 'data' => $res]);
         }
-        return response(['status' =>'failure', 'data' => $res]);
+        return response(['status' =>'failure', 'msg' => 'データを削除できませんでした。']);
     }
 }

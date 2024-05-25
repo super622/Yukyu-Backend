@@ -38,14 +38,14 @@ class AbsenceRegistrationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         $absenceDay = Carbon::parse($request->absence_day);
         $absenceEndDay = Carbon::parse($request->absence_end_day);
 
         if($absenceDay > $absenceEndDay) {
-            return response(['status' => 'failure', 'error' => 'absence_day < absence_end_day']);
+            return response(['status' => 'failure', 'msg' => '欠勤日をご確認ください。']);
         }
 
         $absences = [];
@@ -76,7 +76,7 @@ class AbsenceRegistrationController extends Controller
         if($absences) {
             return response(['status' => 'success', 'data' => $absences]);
         }
-        return response(['status' => 'failure']);
+        return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
 
     /**
@@ -98,14 +98,14 @@ class AbsenceRegistrationController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         $absenceDay = Carbon::parse($request->absence_day);
         $absenceEndDay = Carbon::parse($request->absence_end_day);
 
         if($absenceDay > $absenceEndDay) {
-            return response(['status' => 'failure', 'error' => 'absence_day < absence_end_day']);
+            return response(['status' => 'failure', 'msg' => '欠勤日をご確認ください。']);
         }
 
         AbsenceRegistration::where('id', $request->id)->delete();
@@ -137,6 +137,6 @@ class AbsenceRegistrationController extends Controller
         if($res) {
             return response(['status' =>'success', 'data' => $res]);
         }
-        return response(['status' =>'failure', 'data' => $res]);
+        return response(['status' =>'failure', 'msg' => 'データを削除できませんでした。']);
     }
 }

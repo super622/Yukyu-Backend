@@ -36,7 +36,7 @@ class EmployeeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         $employee = Employee::create($data);
@@ -60,7 +60,7 @@ class EmployeeController extends Controller
             $employee->working_hours_label = $employee->working_hours . '時間';
             return response(['status' => 'success', 'data' => $employee]);
         }
-        return response(['status' => 'failure']);
+        return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
 
     /**
@@ -80,7 +80,7 @@ class EmployeeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         Employee::where('id', $request->id)->update($data);
@@ -100,6 +100,6 @@ class EmployeeController extends Controller
         if($res) {
             return response(['status' =>'success', 'data' => $res]);
         }
-        return response(['status' =>'failure', 'data' => $res]);
+        return response(['status' =>'failure', 'msg' => 'データを削除できませんでした。']);
     }
 }

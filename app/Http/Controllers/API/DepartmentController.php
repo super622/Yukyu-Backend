@@ -36,7 +36,7 @@ class DepartmentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         $department = Department::create($data);
@@ -44,7 +44,7 @@ class DepartmentController extends Controller
             $members = explode(',', $data['member']);
             Employee::whereIn('id', $members)->update(['department' => $department->id]);
         }
-        return response(['status' => 'success', 'message' => $department]);
+        return response(['status' => 'success', 'data' => $department]);
     }
 
     /**
@@ -62,7 +62,7 @@ class DepartmentController extends Controller
             $department->members = $members;
             return response(['status' => 'success', 'data' => $department]);
         }
-        return response(['status' => 'failure']);
+        return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
 
     /**
@@ -81,7 +81,7 @@ class DepartmentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         Department::where('id', $request->id)->update(['name' => $request->name, 'priority' => $request->priority, 'number' => $request->number]);
@@ -105,6 +105,6 @@ class DepartmentController extends Controller
         if($res) {
             return response(['status' => 'success']);
         }
-        return response(['status' =>'failure']);
+        return response(['status' =>'failure', 'msg' => 'データを削除できませんでした。']);
     }
 }

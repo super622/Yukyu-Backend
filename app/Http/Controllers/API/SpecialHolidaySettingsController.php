@@ -35,7 +35,7 @@ class SpecialHolidaySettingsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         $spcialholidaysettings = SpecialHolidaySettings::create($data);
@@ -54,7 +54,7 @@ class SpecialHolidaySettingsController extends Controller
         if($spcialholidaysettings) {
             return response(['status' => 'success', 'data' => $spcialholidaysettings]);
         }
-        return response(['status' => 'failure']);
+        return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
 
     /**
@@ -73,7 +73,7 @@ class SpecialHolidaySettingsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response(['status' => 'failure', 'error' => $validator->errors()]);
+            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
         SpecialHolidaySettings::where('id', $request->id)->update($data);
@@ -92,6 +92,6 @@ class SpecialHolidaySettingsController extends Controller
         if($res) {
             return response(['status' =>'success', 'data' => $res]);
         }
-        return response(['status' =>'failure', 'data' => $res]);
+        return response(['status' =>'failure', 'msg' => 'データを削除できませんでした。']);
     }
 }
