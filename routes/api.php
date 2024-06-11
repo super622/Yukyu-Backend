@@ -10,6 +10,8 @@ use App\Http\Controllers\API\SpecialHolidaySettingsController;
 use App\Http\Controllers\API\AbsenceRegistrationController;
 use App\Http\Controllers\API\PaidHolidayController;
 use App\Http\Controllers\API\SpecialHolidayController;
+use App\Http\Controllers\API\DashBoardController;
+use App\Http\Controllers\API\EventDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,17 +42,11 @@ Route::post('/create_employee', [EmployeeController::class, 'store']);
 Route::post('/remove_employee', [EmployeeController::class, 'destroy']);
 Route::post('/update_employee', [EmployeeController::class, 'update']);
 Route::post('/show_employee', [EmployeeController::class, 'show']);
+Route::post('/csv_create_employee', [EmployeeController::class, 'csv_store']);
 
 // PaidHolidaySettings
 Route::post('/update_paidholidaysettings', [PaidHolidaySettingsController::class, 'update']);
 Route::post('/show_paidholidaysettings', [PaidHolidaySettingsController::class, 'show']);
-
-// SpecialHolidaySettings
-Route::post('/speicalholidaysettings_list', [SpecialHolidaySettingsController::class, 'index']);
-Route::post('/create_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'store']);
-Route::post('/remove_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'destroy']);
-Route::post('/update_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'update']);
-Route::post('/show_speicalholidaysettings', [SpecialHolidaySettingsController::class, 'show']);
 
 // SpecialHolidaySettings
 Route::post('/speicalholidaysettings_list', [SpecialHolidaySettingsController::class, 'index']);
@@ -76,3 +72,12 @@ Route::post('/create_specialholiday', [SpecialHolidayController::class, 'store']
 Route::post('/remove_specialholiday', [SpecialHolidayController::class, 'destroy']);
 Route::post('/update_specialholiday', [SpecialHolidayController::class, 'update']);
 Route::post('/show_specialholiday', [SpecialHolidayController::class, 'show']);
+
+// Dashboard
+Route::post('/dashboard', [DashBoardController::class, 'show']);
+
+// Get Event Data
+Route::post('/get_event_data', [EventDataController::class, 'show']);
+
+// Get Employee 
+Route::post('/get_employee_without_department', [EmployeeController::class, 'get_employee_without_department']);

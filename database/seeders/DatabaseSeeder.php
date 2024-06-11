@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
-use Database\Factories\ProductFactory;
+use App\Models\Employee;
+use App\Models\PaidHolidaySettings;
+use Database\Factories\EmployeeFactory;
+use Database\Factories\PaidHolidaySettingsFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        Product::factory(50)->create();
+        Employee::factory(1)->create();
+        PaidHolidaySettings::factory(1)->create();
     }
 }

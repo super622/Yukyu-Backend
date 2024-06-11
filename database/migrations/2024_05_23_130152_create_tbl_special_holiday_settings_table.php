@@ -16,12 +16,12 @@ class CreateTblSpecialHolidaySettingsTable extends Migration
         Schema::create('tbl_special_holiday_settings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('priority')->default(0);
-            $table->integer('status')->default(1);
-            $table->integer('notice_excess_consumption')->default(0);
-            $table->integer('expire_year')->default(0);
-            $table->integer('expire_month')->default(0);
-            $table->integer('expire_day')->default(0);
+            $table->integer('priority')->default(0)->nullable();
+            $table->integer('status')->default(1)->nullable();
+            $table->integer('notice_excess_consumption')->default(0)->nullable();
+            $table->integer('expire_year')->default(0)->nullable();
+            $table->integer('expire_month')->default(0)->nullable();
+            $table->integer('expire_day')->default(0)->nullable();
             $table->timestamps();
         });
     }

@@ -15,13 +15,15 @@ class CreateTblPaidHolidaySettingsTable extends Migration
     {
         Schema::create('tbl_paid_holiday_settings', function (Blueprint $table) {
             $table->id();
-            $table->integer('acquisition_order')->default(1);
-            $table->integer('minimum_acquisition_unit')->default(3);
-            $table->integer('scheduled_working_hours')->default(1);
+            $table->integer('acquisition_order')->default(0);
+            $table->integer('minimum_acquisition_unit')->default(2);
+            $table->integer('scheduled_working_hours')->default(0);
             $table->integer('date_of_expiry_year')->default(2);
             $table->integer('date_of_expiry_month')->default(0);
             $table->integer('automatic_grant')->default(1);
             $table->integer('grant_implementation_date')->default(1);
+            $table->integer('base_date_month')->default(9);
+            $table->integer('base_date_day')->default(18);
             $table->timestamps();
         });
     }

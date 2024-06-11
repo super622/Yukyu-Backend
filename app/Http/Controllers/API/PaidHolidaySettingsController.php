@@ -39,6 +39,14 @@ class PaidHolidaySettingsController extends Controller
     public function show(Request $request)
     {
         $settings = PaidHolidaySettings::first();
+        $settings->acquisition_order_label = $this->acquisition_order[$settings->acquisition_order];
+        $settings->minimum_acquisition_unit_label = $this->minimum_acquisition_unit[$settings->minimum_acquisition_unit];
+        $settings->scheduled_working_hours_label = $this->scheduled_working_hours[$settings->scheduled_working_hours];
+        $settings->grant_implementation_date_label = $this->grant_implementation_date[$settings->grant_implementation_date];
+        $settings->acquisition_order_container = $this->acquisition_order;
+        $settings->minimum_acquisition_unit_container = $this->minimum_acquisition_unit;
+        $settings->scheduled_working_hours_container = $this->scheduled_working_hours;
+        $settings->grant_implementation_date_container = $this->grant_implementation_date;
         return response(['status' => 'success', 'data' => $settings]);
     }
 
@@ -51,6 +59,10 @@ class PaidHolidaySettingsController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+
+        if ($request->date_of_expiry_year && intval($request->date_of_expiry_year) < 2) {
+            return response(['status' => 'failure', 'msg' => '有効期限は合計が2年以上になるように指定してください。']);
+        }
 
         PaidHolidaySettings::where('id', 1)->update($data);
         return response(['status' =>'success']);

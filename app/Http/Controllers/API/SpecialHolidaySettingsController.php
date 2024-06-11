@@ -30,12 +30,8 @@ class SpecialHolidaySettingsController extends Controller
     {
         $data = $request->all();
 
-        $validator = Validator::make($data, [
-            'name' =>'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
+        if ($request->name == '') {
+            return response(['status' => 'failure', 'msg' => '名前を入力してください']);
         }
 
         $spcialholidaysettings = SpecialHolidaySettings::create($data);

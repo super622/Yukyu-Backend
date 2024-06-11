@@ -68,8 +68,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $email = $request['email'];
-        $password = $request['password'];
+        $email = $request['email'] ? $request['email'] : '';
+        $password = $request['password'] ? $request['password'] : '';
         $employee = Employee::where('email', $email)->first();
 
         if($employee) {
@@ -77,12 +77,12 @@ class AuthController extends Controller
                 $accessToken = $employee->createToken('yukyu')->accessToken;
                 $employee->token = $accessToken;
                 $this->setMemberSession($employee);
-                return response(['status' => 'success', 'user' => $employee, 'token' => $accessToken]);
+                return response(['status' => 'success', 'user' => $employee, 'token' => $accessToken, 'msg' => 'ログインしました。']);
             } else {
                 return response(['status' => 'failure', 'msg' => 'パスワードが正しくありません。']);
             }
         } else {
-            return response(['status' => 'failure', 'msg' => 'ユーザー情報が存在しません。']);
+            return response(['status' => 'failure', 'msg' => 'メールアドレス もしくはパスワードが不正です。']);
         }
     }
 

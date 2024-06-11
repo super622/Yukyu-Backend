@@ -28,6 +28,8 @@ class PaidHolidaySettings extends Model
         'date_of_expiry_year',
         'date_of_expiry_month',
         'automatic_grant',
-        'grant_implementation_date'
+        'grant_implementation_date',
+        'base_date_month',
+        'base_date_day'
     ];
 }

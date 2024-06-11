@@ -17,7 +17,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::get();
+        $departments = Department::orderBy('priority', 'DESC')->get();
         return response(['status' => 'success', 'data' => $departments]);
     }
 
@@ -39,12 +39,17 @@ class DepartmentController extends Controller
             return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
-        $department = Department::create($data);
+        $members = explode(',', $data['member']);
         if($data['member']) {
-            $members = explode(',', $data['member']);
+            $data['number'] = count($members);
+            $department = Department::create($data);
             Employee::whereIn('id', $members)->update(['department' => $department->id]);
+            return response(['status' => 'success', 'data' => $department]);
+        } else {
+            $data['number'] = 0;
+            $department = Department::create($data);
+            return response(['status' => 'success', 'data' => $department]);
         }
-        return response(['status' => 'success', 'data' => $department]);
     }
 
     /**
@@ -84,11 +89,12 @@ class DepartmentController extends Controller
             return response(['status' => 'failure', 'msg' => '必須情報を正確に入力してください。']);
         }
 
-        Department::where('id', $request->id)->update(['name' => $request->name, 'priority' => $request->priority, 'number' => $request->number]);
-        if($data['member']) {
-            $members = explode(',', $data['member']);
-            Employee::where("department", "=", $request->id)->whereNotIn('id', $members)->update(['department' => null]);
-        }
+        $members = explode(',', $data['member']);
+        $number = $data['member'] ? count($members) : 0;
+        Department::where('id', $request->id)->update(['name' => $request->name, 'priority' => $request->priority, 'number' => $number]);
+        Employee::whereIn('id', $members)->update(['department' => $request->id]);
+        Employee::where("department", "=", $request->id)->whereNotIn('id', $members)->update(['department' => null]);
+        
         return response(['status' =>'success']);
     }
 
@@ -102,6 +108,7 @@ class DepartmentController extends Controller
     public function destroy(Request $request)
     {
         $res = Department::where('id', $request->id)->delete();
+        Employee::where("department", "=", $request->id)->update(['department' => null]);
         if($res) {
             return response(['status' => 'success']);
         }

@@ -15,15 +15,15 @@ class CreateTblEmployeeTable extends Migration
     {
         Schema::create('tbl_employee', function (Blueprint $table) {
             $table->id();
-            $table->integer('employee_id')->nullable();
+            $table->string('employee_number')->nullable();
             $table->string('name')->default('')->nullable();
             $table->string('kana_name')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->integer('department')->nullable();
             $table->timestamp('hire_date')->nullable();
-            $table->integer('onleave')->nullable();
-            $table->integer('working_type')->nullable();
+            $table->integer('status')->default(0)->nullable();
+            $table->string('working_type')->nullable();
             $table->integer('working_hours')->nullable();
             $table->longText('note')->nullable();
             $table->timestamps();
