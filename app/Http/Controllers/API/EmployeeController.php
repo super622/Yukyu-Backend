@@ -164,13 +164,43 @@ class EmployeeController extends Controller
      */
     public function show(Request $request)
     {
-        $employee = Employee::find($request->id);
+        $employee = Employee::where('name', '!=', '')->first();
+        if($request->id) {
+            $employee = Employee::find($request->id);
+        }
+        $total_cnt =   Employee::count();
         if($employee) {
             $department = Department::find($employee->department);
-            $employee->department_label = $department->name;
+            if($department) {
+                $employee->department_label = $department->name;
+            } else {
+                $employee->department_label = '';
+            }
             $employee->working_type_label = $this->working_type[$employee->working_type];
             $employee->working_hours_label = $employee->working_hours . '時間';
-            return response(['status' => 'success', 'data' => $employee]);
+
+            $previousEmployee = '';
+            $id = (int) $employee->id;
+            while($previousEmployee == '') {
+                $previousEmployee = Employee::where('id', '<', $id)->where('name', '!=', '')->orderBy('id', 'desc')->first();
+                $id -= 1;
+                if($id < 0) {
+                    $previousEmployee = null;
+                    break;
+                }
+            }
+
+            $nextEmployee = '';
+            $id = (int) $employee->id;
+            while($nextEmployee == '') {
+                $nextEmployee = Employee::where('id', '>', $id)->where('name', '!=', '')->orderBy('id', 'asc')->first();
+                $id += 1;
+                if($id > (int) $total_cnt) {
+                    $nextEmployee = null;
+                    break;
+                }
+            }
+            return response(['status' => 'success', 'data' => $employee, 'prev' => $previousEmployee, 'next' => $nextEmployee]);
         }
         return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
@@ -184,11 +214,11 @@ class EmployeeController extends Controller
      */
     public function get_employee_without_department(Request $request)
     {
-        $employee = Employee::select("tbl_employee.*", "tbl_department.name as department_name")
-                                ->where('department', '=', null)
+        $employee = Employee::select("*")
+                                ->where('department', '=', 0)
                                 ->where('name', '!=', '')
-                                ->leftjoin("tbl_employee", "tbl_employee.department", "tbl_department.id")
                                 ->get();
+    
         if($employee) {
             return response(['status' => 'success', 'data' => $employee]);
         }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\AbsenceRegistration;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -72,9 +73,10 @@ class AbsenceRegistrationController extends Controller
      */
     public function show(Request $request)
     {
-        $absences = AbsenceRegistration::where('id', '=', $request->id)->get();
+        $absences = AbsenceRegistration::where('id', '=', $request->id)->orderby('absence_day', 'asc')->get();
         if($absences) {
-            return response(['status' => 'success', 'data' => $absences]);
+            $employee = Employee::find($absences[0]->employee_id);
+            return response(['status' => 'success', 'data' => $absences, 'emp' => $employee]);
         }
         return response(['status' => 'failure', 'msg' => '該当する資料が存在しません。']);
     }
