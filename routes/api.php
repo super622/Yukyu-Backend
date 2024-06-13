@@ -12,6 +12,7 @@ use App\Http\Controllers\API\PaidHolidayController;
 use App\Http\Controllers\API\SpecialHolidayController;
 use App\Http\Controllers\API\DashBoardController;
 use App\Http\Controllers\API\EventDataController;
+use App\Http\Controllers\API\ObligationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,3 +82,7 @@ Route::post('/get_event_data', [EventDataController::class, 'show']);
 
 // Get Employee 
 Route::post('/get_employee_without_department', [EmployeeController::class, 'get_employee_without_department']);
+
+// Obligation
+Route::post('/get_obligation', [ObligationController::class, 'show']);
+Route::post('/send_oblication_notice', [ObligationController::class, 'send']);
